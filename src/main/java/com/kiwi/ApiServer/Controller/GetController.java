@@ -12,6 +12,11 @@ import java.io.FileInputStream;
 
 @RestController
 public class GetController {
+    @GetMapping("/user/test")
+    public String test(){
+        return "success";
+    }
+
     @GetMapping("/viewpdf")
     public ResponseEntity<InputStreamResource> getViewPdf() {
         System.out.println("connected");
