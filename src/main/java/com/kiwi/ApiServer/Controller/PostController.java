@@ -36,20 +36,27 @@ public class PostController {
 
     // 회원가입
     @PostMapping("/signup")
-    public Long join(@RequestBody Map<String, String> user) {
-//        System.out.println(user.toString());
-        return userRepository.save(User.builder()
+    public SingleResult join(@RequestBody Map<String, String> user) {
+        SingleResult result = new SingleResult();
+        Long id = userRepository.save(User.builder()
                 .email(user.get("email"))
 //                .password(passwordEncoder.encode(user.get("password")))
                 .password(user.get("password"))
                 .name(user.get("name"))
                 .roles(Collections.singletonList("ROLE_USER")) // 최초 가입시 USER 로 설정
                 .build()).getId();
+
+        result.setResult(200);
+        result.setMessage("success");
+        result.setData(id);
+        return result;
     }
 
     // 로그인
     @PostMapping("/signin")
-    public String login(@RequestBody Map<String, String> user) {
+    public SingleResult login(@RequestBody Map<String, String> user) {
+        SingleResult result = new SingleResult();
+
         User member = userRepository.findByEmail(user.get("email"))
                 .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 E-MAIL 입니다."));
 //        System.out.println(user.get("password"));
@@ -60,7 +67,11 @@ public class PostController {
         if(!user.get("password").equals(member.getPassword())){
             throw new IllegalArgumentException("잘못된 비밀번호입니다.");
         }
-        return jwtTokenProvider.createToken(member.getUsername(), member.getRoles());
+
+        result.setResult(200);
+        result.setMessage("success");
+        result.setData(jwtTokenProvider.createToken(member.getUsername(), member.getRoles()));
+        return result;
 
     }
 
