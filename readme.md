@@ -22,8 +22,7 @@ API-Server/src/main/resources/application.properties<br>
 spring.jpa.hibernate.ddl-auto=create-drop <br>
 
 실행시 테이블 생성 -> 종료시 테이블 유지 <br>
-spring.jpa.hibernate.ddl-auto=create <br>
-
+spring.jpa.hibernate.ddl-auto=create
 #실행
 `mvn spring-boot:run`
 
