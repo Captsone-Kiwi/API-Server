@@ -1,6 +1,8 @@
 #프로그램 요구사항
+
 mysql<br>
 mvn
+
 #사전 작업 (필수)
 ## 수정 파일
 API-Server/src/main/resources/application.properties<br>
@@ -19,13 +21,12 @@ API-Server/src/main/resources/application.properties<br>
 
 ### mysql table 자동생성 설정
 실행시 테이블 생성 -> 종료시 테이블 삭제 <br>
-spring.jpa.hibernate.ddl-auto=create-drop <br>
+`spring.jpa.hibernate.ddl-auto=create-drop` <br>
 
 실행시 테이블 생성 -> 종료시 테이블 유지 <br>
-spring.jpa.hibernate.ddl-auto=create
+`spring.jpa.hibernate.ddl-auto=create`
 
 
 #실행
-
 `mvn spring-boot:run`
 
