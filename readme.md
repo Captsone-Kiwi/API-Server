@@ -1,9 +1,9 @@
-#프로그램 요구사항
+##프로그램 요구사항
 
 mysql<br>
 mvn
 
-#사전 작업 (필수)
+##사전 작업 (필수)
 ## 수정 파일
 API-Server/src/main/resources/application.properties<br>
 ##변경사항
@@ -27,6 +27,6 @@ API-Server/src/main/resources/application.properties<br>
 `spring.jpa.hibernate.ddl-auto=create`
 
 
-#실행
+##실행
 `mvn spring-boot:run`
 
