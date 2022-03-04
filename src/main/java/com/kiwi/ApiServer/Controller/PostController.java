@@ -57,22 +57,25 @@ public class PostController {
     public SingleResult login(@RequestBody Map<String, String> user) {
         SingleResult result = new SingleResult();
 
+//        User member = userRepository.findByEmail(user.get("email"))
+//                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 E-MAIL 입니다."));
+
         User member = userRepository.findByEmail(user.get("email"))
-                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 E-MAIL 입니다."));
-//        System.out.println(user.get("password"));
-//        System.out.println(member.getPassword());
-//        if (!passwordEncoder.matches(user.get("password"), member.getPassword())) {
-//            throw new IllegalArgumentException("잘못된 비밀번호입니다.");
-//        }
-        if(!user.get("password").equals(member.getPassword())){
-            throw new IllegalArgumentException("잘못된 비밀번호입니다.");
+                .orElse(null);
+        if(member == null){
+            System.out.println("null");
+            result.setResult(400);
+            result.setMessage("user not found");
+        }else{
+            System.out.println(member.toString());
+            if(!user.get("password").equals(member.getPassword())){
+                throw new IllegalArgumentException("잘못된 비밀번호입니다.");
+            }
+            result.setResult(200);
+            result.setMessage("success");
+            result.setData(jwtTokenProvider.createToken(member.getUsername(), member.getRoles()));
         }
-
-        result.setResult(200);
-        result.setMessage("success");
-        result.setData(jwtTokenProvider.createToken(member.getUsername(), member.getRoles()));
         return result;
-
     }
 
     @PostMapping(value = "upload")
