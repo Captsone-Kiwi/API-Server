@@ -63,17 +63,21 @@ public class PostController {
         User member = userRepository.findByEmail(user.get("email"))
                 .orElse(null);
         if(member == null){
-            System.out.println("null");
+//            System.out.println("null");
             result.setResult(400);
             result.setMessage("user not found");
         }else{
-            System.out.println(member.toString());
+//            System.out.println(member.toString());
+
             if(!user.get("password").equals(member.getPassword())){
-                throw new IllegalArgumentException("잘못된 비밀번호입니다.");
+//                throw new IllegalArgumentException("잘못된 비밀번호입니다.");
+                result.setResult(401);
+                result.setMessage("wrong password");
+            }else{
+                result.setResult(200);
+                result.setMessage("success");
+                result.setData(jwtTokenProvider.createToken(member.getUsername(), member.getRoles()));
             }
-            result.setResult(200);
-            result.setMessage("success");
-            result.setData(jwtTokenProvider.createToken(member.getUsername(), member.getRoles()));
         }
         return result;
     }
