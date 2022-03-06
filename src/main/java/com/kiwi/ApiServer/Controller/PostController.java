@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.http.MediaType;
 
 import java.util.Collections;
 import java.util.Map;
@@ -35,7 +36,7 @@ public class PostController {
     private final UserRepository userRepository;
 
     // 회원가입
-    @PostMapping("/signup")
+    @PostMapping(value = "/signup", produces = MediaType.APPLICATION_JSON_VALUE)
     public SingleResult join(@RequestBody Map<String, String> user) {
         SingleResult result = new SingleResult();
         Long id = userRepository.save(User.builder()
