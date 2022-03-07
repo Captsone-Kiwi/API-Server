@@ -108,12 +108,12 @@
 			<version>2.1.4</version>
 		</dependency>
 
-		<!-- jackson-databind 라이브러리 추가 -->
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-databind</artifactId>
-			<version>2.9.6</version>
-		</dependency>
+<!--		&lt;!&ndash; jackson-databind 라이브러리 추가 &ndash;&gt;-->
+<!--		<dependency>-->
+<!--			<groupId>com.fasterxml.jackson.core</groupId>-->
+<!--			<artifactId>jackson-databind</artifactId>-->
+<!--			<version>2.9.6</version>-->
+<!--		</dependency>-->
 
 	</dependencies>
 
