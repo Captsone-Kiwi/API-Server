@@ -1,6 +1,7 @@
 package com.kiwi.ApiServer.Controller;
 
 import com.kiwi.ApiServer.DAO.UserRepository;
+import com.kiwi.ApiServer.DTO.Interview.CreateInterview;
 import com.kiwi.ApiServer.DTO.ResponseMessage;
 import com.kiwi.ApiServer.DTO.User;
 import com.kiwi.ApiServer.Response.SingleResult;
@@ -36,17 +37,33 @@ public class PostController {
     @PostMapping(value = "/signup")
     public SingleResult join(@RequestBody Map<String, String> user) {
         SingleResult result = new SingleResult();
-        Long id = userRepository.save(User.builder()
-                .email(user.get("email"))
+        System.out.println(user.get("memberType"));
+        if(user.get("memberType").equals("1")){
+            Long id = userRepository.save(User.builder()
+                    .email(user.get("email"))
 //                .password(passwordEncoder.encode(user.get("password")))
-                .password(user.get("password"))
-                .name(user.get("name"))
-                .roles(Collections.singletonList("ROLE_USER")) // 최초 가입시 USER 로 설정
-                .build()).getId();
-
-        result.setResult(200);
-        result.setMessage("success");
-        result.setData(id);
+                    .password(user.get("password"))
+                    .name(user.get("name"))
+                    .roles(Collections.singletonList("ROLE_INTERVIEWEE")) // 면접관
+                    .build()).getId();
+            result.setResult(200);
+            result.setMessage("success");
+            result.setData(id);
+        }else if(user.get("memberType").equals("2")){
+            Long id = userRepository.save(User.builder()
+                    .email(user.get("email"))
+//                .password(passwordEncoder.encode(user.get("password")))
+                    .password(user.get("password"))
+                    .name(user.get("name"))
+                    .roles(Collections.singletonList("ROLE_INTERVIEWER")) // 자면접 대상
+                    .build()).getId();
+            result.setResult(200);
+            result.setMessage("success");
+            result.setData(id);
+        }else{
+            result.setResult(400);
+            result.setMessage("error");
+        }
         return result;
     }
 
@@ -78,6 +95,15 @@ public class PostController {
             }
         }
         return result;
+    }
+
+    @PostMapping(value = "createInterview")
+    public SingleResult createInterview(@RequestBody CreateInterview createInterview){
+        SingleResult singleResult = new SingleResult();
+
+        singleResult.setResult(200);
+        singleResult.setMessage("SUCCESS");
+        return singleResult;
     }
 
     @PostMapping(value = "upload")

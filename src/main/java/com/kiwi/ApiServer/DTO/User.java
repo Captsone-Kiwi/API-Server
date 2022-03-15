@@ -34,6 +34,9 @@ public class User implements UserDetails {
     @Column(length = 30, nullable = false)
     private String password;
 
+    @Column(nullable = false)
+    private int memberType;
+
     @ElementCollection(fetch = FetchType.EAGER)
     @Builder.Default
     private List<String> roles = new ArrayList<>();
