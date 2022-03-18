@@ -30,3 +30,11 @@ API-Server/src/main/resources/application.properties<br>
 ##실행
 `mvn spring-boot:run`
 
+##MySQL 테이블 생성
+```mysql
+CREATE TABLE interview_participant(
+    interview_id int,
+    player_id int
+);
+```
+

@@ -1,11 +1,14 @@
 package com.kiwi.ApiServer.DTO.Interview;
 
-import lombok.Getter;
+import lombok.*;
 
+import javax.persistence.*;
 import java.util.List;
 
 @Getter
+@ToString
 public class CreateInterview {
+    private int interview_id;
     private String interviewName;
     private String startTime;
     private int template;

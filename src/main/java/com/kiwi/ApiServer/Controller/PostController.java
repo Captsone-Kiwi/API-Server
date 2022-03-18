@@ -1,5 +1,7 @@
 package com.kiwi.ApiServer.Controller;
 
+import com.kiwi.ApiServer.DAO.InterviewRepository;
+import com.kiwi.ApiServer.DAO.SQLDAO;
 import com.kiwi.ApiServer.DAO.UserRepository;
 import com.kiwi.ApiServer.DTO.Interview.CreateInterview;
 import com.kiwi.ApiServer.DTO.ResponseMessage;
@@ -7,6 +9,7 @@ import com.kiwi.ApiServer.DTO.User;
 import com.kiwi.ApiServer.Response.SingleResult;
 import com.kiwi.ApiServer.Security.JwtTokenProvider;
 import com.kiwi.ApiServer.Service.FileStorageService;
+import com.kiwi.ApiServer.Table.interview;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +20,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.http.MediaType;
 
+import javax.servlet.http.HttpServletRequest;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.Map;
 
 @Slf4j
@@ -32,6 +39,7 @@ public class PostController {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final UserRepository userRepository;
+    private final InterviewRepository interviewRepository;
 
     // 회원가입
     @PostMapping(value = "/signup")
@@ -98,9 +106,29 @@ public class PostController {
     }
 
     @PostMapping(value = "createInterview")
-    public SingleResult createInterview(@RequestBody CreateInterview createInterview){
+    public SingleResult createInterview(HttpServletRequest request, @RequestBody CreateInterview createInterview) throws Exception{
         SingleResult singleResult = new SingleResult();
+        SQLDAO sqldao = new SQLDAO();
+        String interview_id = "";
+        String token = request.getHeader("X-AUTH-TOKEN");
 
+        ResultSet res = sqldao.createInterview(createInterview.getInterviewName(),createInterview.getStartTime(),createInterview.getTemplate());
+        while(res.next()){
+            interview_id = res.getString("id");
+        }
+
+        String user = jwtTokenProvider.getUser(token);
+        sqldao.insertInterviewParticipant(interview_id,user);
+
+        for(Iterator<String> iter = createInterview.getInterviewee().iterator(); iter.hasNext(); ){
+            String intervieweeEmail = iter.next();
+            sqldao.insertInterviewParticipant(interview_id,intervieweeEmail);
+        }
+
+        for(Iterator<String> iter = createInterview.getInterviewer().iterator(); iter.hasNext(); ){
+            String interviewerEmail = iter.next();
+            sqldao.insertInterviewParticipant(interview_id,interviewerEmail);
+        }
         singleResult.setResult(200);
         singleResult.setMessage("SUCCESS");
         return singleResult;
