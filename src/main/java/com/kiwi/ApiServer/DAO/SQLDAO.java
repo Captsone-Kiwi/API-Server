@@ -63,4 +63,24 @@ public class SQLDAO {
         ResultSet res = pstmt.executeQuery();
         return res;
     }
+
+    public void deleteInterview(String id) throws Exception{
+        String query = "DELETE FROM interview WHERE id = (?)";
+        PreparedStatement pstmt = conn.prepareStatement(query);
+        pstmt.setString(1,id);
+        pstmt.executeUpdate();
+
+        query = "DELETE FROM interview_participant WHERE interview_id = (?)";
+        pstmt = conn.prepareStatement(query);
+        pstmt.setString(1,id);
+        pstmt.executeUpdate();
+    }
+
+    public ResultSet getParticipantFromInterviewId(String id) throws Exception{
+        String query = "SELECT user_email FROM interview_participant WHERE interview_id = (?)";
+        PreparedStatement pstmt = conn.prepareStatement(query);
+        pstmt.setString(1,id);
+        ResultSet result = pstmt.executeQuery();
+        return result;
+    }
 }

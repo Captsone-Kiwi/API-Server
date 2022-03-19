@@ -11,6 +11,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -60,6 +61,36 @@ public class GetController {
         res.setMessage("success");
         res.setData(data);
         return res;
+    }
+
+    @GetMapping("/deleteInterview")
+    public SingleResult deleteInterview(@RequestParam String id) throws Exception{
+        SingleResult result = new SingleResult();
+        SQLDAO sqldao = new SQLDAO();
+        sqldao.deleteInterview(id);
+
+        result.setResult(200);
+        result.setMessage("success");
+        return result;
+    }
+
+    @GetMapping("/participant")
+    public SingleResult getParticipantList(@RequestParam String id) throws Exception {
+        SingleResult result = new SingleResult();
+
+        SQLDAO sqldao = new SQLDAO();
+        ResultSet participantList = sqldao.getParticipantFromInterviewId(id);
+        List<String> data = new ArrayList<>();
+
+        while(participantList.next()){
+            String participant = participantList.getString("user_email");
+            data.add(participant);
+        }
+
+        result.setResult(200);
+        result.setMessage("success");
+        result.setData(data);
+        return result;
     }
 
     @GetMapping("/viewpdf")
