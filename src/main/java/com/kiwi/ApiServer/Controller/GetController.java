@@ -63,6 +63,23 @@ public class GetController {
         return res;
     }
 
+    @GetMapping("/getUsername")
+    public SingleResult getUsername(HttpServletRequest request) throws Exception{
+        SingleResult result = new SingleResult();
+        SQLDAO sqldao = new SQLDAO();
+        String token = request.getHeader("X-AUTH-TOKEN");
+        String email = jwtTokenProvider.getUser(token);
+
+        ResultSet username = sqldao.getUsernameFromEmail(email);
+        while(username.next()){
+            result.setData(username.getString(1));
+//            System.out.println(username.getString(1));
+        }
+        result.setResult(200);
+        result.setMessage("success");
+        return result;
+    }
+
     @GetMapping("/deleteInterview")
     public SingleResult deleteInterview(@RequestParam String id) throws Exception{
         SingleResult result = new SingleResult();

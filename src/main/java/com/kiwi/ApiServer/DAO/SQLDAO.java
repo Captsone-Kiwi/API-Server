@@ -83,4 +83,11 @@ public class SQLDAO {
         ResultSet result = pstmt.executeQuery();
         return result;
     }
+
+    public ResultSet getUsernameFromEmail(String email) throws Exception{
+        String query = "SELECT name FROM user WHERE email = (?)";
+        PreparedStatement pstmt = conn.prepareStatement(query);
+        pstmt.setString(1,email);
+        return pstmt.executeQuery();
+    }
 }
