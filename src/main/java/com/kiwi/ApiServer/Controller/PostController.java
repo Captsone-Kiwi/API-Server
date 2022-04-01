@@ -52,6 +52,7 @@ public class PostController {
 //                .password(passwordEncoder.encode(user.get("password")))
                     .password(user.get("password"))
                     .name(user.get("name"))
+                    .memberType(1)
                     .roles(Collections.singletonList("ROLE_INTERVIEWEE")) // 면접관
                     .build()).getId();
             result.setResult(200);
@@ -63,6 +64,7 @@ public class PostController {
 //                .password(passwordEncoder.encode(user.get("password")))
                     .password(user.get("password"))
                     .name(user.get("name"))
+                    .memberType(2)
                     .roles(Collections.singletonList("ROLE_INTERVIEWER")) // 자면접 대상
                     .build()).getId();
             result.setResult(200);

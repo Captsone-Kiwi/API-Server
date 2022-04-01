@@ -1,6 +1,7 @@
 package com.kiwi.ApiServer.Controller;
 
 import com.kiwi.ApiServer.DAO.SQLDAO;
+import com.kiwi.ApiServer.DTO.User;
 import com.kiwi.ApiServer.Response.SingleResult;
 import com.kiwi.ApiServer.Security.JwtTokenProvider;
 import com.kiwi.ApiServer.Table.interview;
@@ -77,6 +78,26 @@ public class GetController {
         }
         result.setResult(200);
         result.setMessage("success");
+        return result;
+    }
+
+    @GetMapping("/getUser")
+    public SingleResult getUser(HttpServletRequest request) throws Exception {
+        SingleResult result = new SingleResult();
+        SQLDAO sqldao = new SQLDAO();
+        String token = request.getHeader("X-AUTH-TOKEN");
+        String email = jwtTokenProvider.getUser(token);
+
+       ResultSet userList = sqldao.getUserFromEmail(email);
+       User user = new User();
+       while(userList.next()){
+           user.setName(userList.getString(1));
+           user.setEmail(userList.getString(2));
+           user.setMemberType(userList.getInt(3));
+       }
+       result.setResult(200);
+       result.setMessage("success");
+       result.setData(user);
         return result;
     }
 
