@@ -53,8 +53,9 @@ public class GetController {
                 interview tmp = new interview();
                 tmp.setId(interview_tmp.getLong(1));
                 tmp.setInterview_name(interview_tmp.getString(2));
-                tmp.setStartTime(interview_tmp.getString(3));
-                tmp.setTemplate(interview_tmp.getInt(4));
+                tmp.setStartDate(interview_tmp.getString(3));
+                tmp.setStartTime(interview_tmp.getString(4));
+                tmp.setTemplate(interview_tmp.getInt(5));
                 data.add(tmp);
             }
         }

@@ -23,13 +23,14 @@ public class SQLDAO {
         return rs;
     }
 
-    public ResultSet createInterview(String interview_name, String startTime, int template) throws SQLException,ClassNotFoundException{
-        String query = "INSERT INTO interview(interview_name, start_time, template) " +
-                "VALUES(?,?,?)";
+    public ResultSet createInterview(String interview_name, String startDate , String startTime, int template) throws SQLException,ClassNotFoundException{
+        String query = "INSERT INTO interview(interview_name,start_date, start_time, template) " +
+                "VALUES(?,?,?,?)";
         PreparedStatement pstmt = conn.prepareStatement(query);
         pstmt.setString(1,interview_name);
-        pstmt.setString(2,startTime);
-        pstmt.setString(3,Integer.toString(template));
+        pstmt.setString(2,startDate);
+        pstmt.setString(3,startTime);
+        pstmt.setString(4,Integer.toString(template));
         pstmt.executeUpdate();
 
         query = "select id from interview where interview_name = (?) order by id";

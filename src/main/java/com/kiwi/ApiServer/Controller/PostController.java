@@ -114,7 +114,7 @@ public class PostController {
         String interview_id = "";
         String token = request.getHeader("X-AUTH-TOKEN");
 
-        ResultSet res = sqldao.createInterview(createInterview.getInterviewName(),createInterview.getStartTime(),createInterview.getTemplate());
+        ResultSet res = sqldao.createInterview(createInterview.getInterviewName(),createInterview.getStartDate(),createInterview.getStartTime(),createInterview.getTemplate());
         while(res.next()){
             interview_id = res.getString("id");
         }

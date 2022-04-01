@@ -19,6 +19,9 @@ public class interview {
     private String interview_name;
 
     @Column(length = 100, nullable = false)
+    private String startDate;
+
+    @Column(length = 100, nullable = false)
     private String startTime;
 
     @Column(nullable = false)

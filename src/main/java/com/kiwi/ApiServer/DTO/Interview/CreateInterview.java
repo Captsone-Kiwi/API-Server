@@ -10,6 +10,7 @@ import java.util.List;
 public class CreateInterview {
     private int interview_id;
     private String interviewName;
+    private String startDate;
     private String startTime;
     private int template;
     private List<String> interviewee;
