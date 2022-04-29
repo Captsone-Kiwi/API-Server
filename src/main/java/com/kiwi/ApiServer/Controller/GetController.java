@@ -132,6 +132,29 @@ public class GetController {
         return result;
     }
 
+    @GetMapping("/getResume")
+    public ResponseEntity<InputStreamResource> getResume(@RequestParam String name){
+        String path = "./uploads/";
+        String file_name = name + ".pdf";
+        System.out.println(file_name);
+        File file = new File(path + file_name);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("content-disposition", "inline;filename=" +file_name);
+        InputStreamResource resource = null;
+        try{
+            resource = new InputStreamResource(new FileInputStream(file));
+        }catch (Exception e){
+            System.out.println(e);
+        }
+        return ResponseEntity.ok()
+                .headers(headers)
+                .contentLength(file.length())
+                .contentType(MediaType.parseMediaType("application/pdf"))
+                .body(resource);
+
+    }
+
     @GetMapping("/viewpdf")
     public ResponseEntity<InputStreamResource> getViewPdf() {
         System.out.println("connected");
