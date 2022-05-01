@@ -1,6 +1,10 @@
 package com.kiwi.ApiServer.Controller;
 
 import com.kiwi.ApiServer.DAO.SQLDAO;
+import com.kiwi.ApiServer.DTO.Evaluation.Evaluation;
+import com.kiwi.ApiServer.DTO.Evaluation.EvaluationCategory;
+import com.kiwi.ApiServer.DTO.Evaluation.EvaluationList;
+import com.kiwi.ApiServer.DTO.Evaluation.EvaluationQuestion;
 import com.kiwi.ApiServer.DTO.User;
 import com.kiwi.ApiServer.Response.SingleResult;
 import com.kiwi.ApiServer.Security.JwtTokenProvider;
@@ -129,6 +133,62 @@ public class GetController {
         result.setResult(200);
         result.setMessage("success");
         result.setData(data);
+        return result;
+    }
+
+    @GetMapping("/getEvaluation")
+    public SingleResult getEvaluation(@RequestParam String evaluationId) throws Exception {
+        SingleResult result = new SingleResult();
+        SQLDAO sqldao = new SQLDAO();
+        Evaluation evaluation = new Evaluation();
+        evaluation.setEvaluationList(new ArrayList<>());
+
+        String name = sqldao.getNameFromEvaluation(evaluationId);
+        evaluation.setName(name);
+
+        List<EvaluationCategory> evaluationCategoryList = sqldao.getEvaluationCategoryFromId(evaluationId);
+        for(EvaluationCategory evaluationCategory : evaluationCategoryList){
+            boolean containsCategory = false;
+            for(EvaluationList evaluationList : evaluation.getEvaluationList()){
+                if(evaluationList.getCategory().equals(evaluationCategory.getCategory())){
+                    containsCategory = true;
+
+                    EvaluationQuestion evaluationQuestion = new EvaluationQuestion();
+                    evaluationQuestion.setTitle(evaluationCategory.getTitle());
+                    evaluationQuestion.setType(evaluationCategory.getType());
+
+                    if(evaluationQuestion.getType() == 1){
+                        List<String> data = sqldao.getEvaluationChoiceFromQuestionId(evaluationCategory.getQuestion_id());
+                        evaluationQuestion.setData(data);
+                    }
+
+                    evaluationList.getQuestions().add(evaluationQuestion);
+
+                    break;
+                }
+            }
+            if(!containsCategory){
+                EvaluationList evaluationList = new EvaluationList();
+                evaluationList.setQuestions(new ArrayList<>());
+                EvaluationQuestion evaluationQuestion = new EvaluationQuestion();
+
+                String category = evaluationCategory.getCategory();
+                evaluationQuestion.setTitle(evaluationCategory.getTitle());
+                evaluationQuestion.setType(evaluationCategory.getType());
+
+                if(evaluationQuestion.getType() == 1){
+                    List<String> data = sqldao.getEvaluationChoiceFromQuestionId(evaluationCategory.getQuestion_id());
+                    evaluationQuestion.setData(data);
+                }
+
+                evaluationList.setCategory(category);
+                evaluationList.getQuestions().add(evaluationQuestion);
+                evaluation.getEvaluationList().add(evaluationList);
+            }
+        }
+        result.setResult(200);
+        result.setMessage("SUCCESS");
+        result.setData(evaluation);
         return result;
     }
 

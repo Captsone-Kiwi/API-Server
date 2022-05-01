@@ -3,13 +3,14 @@ package com.kiwi.ApiServer.Controller;
 import com.kiwi.ApiServer.DAO.InterviewRepository;
 import com.kiwi.ApiServer.DAO.SQLDAO;
 import com.kiwi.ApiServer.DAO.UserRepository;
+import com.kiwi.ApiServer.DTO.*;
+import com.kiwi.ApiServer.DTO.Evaluation.Evaluation;
+import com.kiwi.ApiServer.DTO.Evaluation.EvaluationList;
+import com.kiwi.ApiServer.DTO.Evaluation.EvaluationQuestion;
 import com.kiwi.ApiServer.DTO.Interview.CreateInterview;
-import com.kiwi.ApiServer.DTO.ResponseMessage;
-import com.kiwi.ApiServer.DTO.User;
 import com.kiwi.ApiServer.Response.SingleResult;
 import com.kiwi.ApiServer.Security.JwtTokenProvider;
 import com.kiwi.ApiServer.Service.FileStorageService;
-import com.kiwi.ApiServer.Table.interview;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,11 +19,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.http.MediaType;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map;
@@ -148,6 +147,34 @@ public class PostController {
             message = "Could not upload the file: " + file.getOriginalFilename();
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(message));
         }
+    }
+
+    @PostMapping(value = "createEvaluation")
+    public SingleResult createEvaluation (@RequestBody Evaluation evaluation) throws Exception{
+        SingleResult result = new SingleResult();
+        System.out.println(evaluation.toString());
+        SQLDAO sqldao = new SQLDAO();
+
+        int evaluationId = sqldao.insertEvaluation(evaluation.getName());
+        for(EvaluationList evaluationList : evaluation.getEvaluationList()){
+            String category = evaluationList.getCategory();
+            for(EvaluationQuestion evaluationQuestion: evaluationList.getQuestions()){
+                int type = evaluationQuestion.getType();
+                String title = evaluationQuestion.getTitle();
+                int question_id = sqldao.insertEvaluationQuestion(evaluationId,type,title,category);
+                System.out.println(question_id);
+                if(type == 1){
+                    for(String choice : evaluationQuestion.getData()){
+                        sqldao.insertEvaluationChoice(question_id,choice);
+                    }
+                }
+            }
+        }
+
+        result.setResult(200);
+        result.setMessage("SUCCESS");
+
+        return result;
     }
 
 //    @PostMapping(value = "upload")
