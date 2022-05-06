@@ -157,10 +157,10 @@ public class GetController {
                     evaluationQuestion.setTitle(evaluationCategory.getTitle());
                     evaluationQuestion.setType(evaluationCategory.getType());
 
-                    if(evaluationQuestion.getType() == 1){
-                        List<String> data = sqldao.getEvaluationChoiceFromQuestionId(evaluationCategory.getQuestion_id());
-                        evaluationQuestion.setData(data);
-                    }
+//                    if(evaluationQuestion.getType() == 1){
+//                        List<String> data = sqldao.getEvaluationChoiceFromQuestionId(evaluationCategory.getQuestion_id());
+//                        evaluationQuestion.setData(data);
+//                    }
 
                     evaluationList.getQuestions().add(evaluationQuestion);
 
@@ -176,10 +176,10 @@ public class GetController {
                 evaluationQuestion.setTitle(evaluationCategory.getTitle());
                 evaluationQuestion.setType(evaluationCategory.getType());
 
-                if(evaluationQuestion.getType() == 1){
-                    List<String> data = sqldao.getEvaluationChoiceFromQuestionId(evaluationCategory.getQuestion_id());
-                    evaluationQuestion.setData(data);
-                }
+//                if(evaluationQuestion.getType() == 1){
+//                    List<String> data = sqldao.getEvaluationChoiceFromQuestionId(evaluationCategory.getQuestion_id());
+//                    evaluationQuestion.setData(data);
+//                }
 
                 evaluationList.setCategory(category);
                 evaluationList.getQuestions().add(evaluationQuestion);

@@ -163,11 +163,11 @@ public class PostController {
                 String title = evaluationQuestion.getTitle();
                 int question_id = sqldao.insertEvaluationQuestion(evaluationId,type,title,category);
                 System.out.println(question_id);
-                if(type == 1){
-                    for(String choice : evaluationQuestion.getData()){
-                        sqldao.insertEvaluationChoice(question_id,choice);
-                    }
-                }
+//                if(type == 1){
+//                    for(String choice : evaluationQuestion.getData()){
+//                        sqldao.insertEvaluationChoice(question_id,choice);
+//                    }
+//                }
             }
         }
 
