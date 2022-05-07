@@ -11,5 +11,7 @@ import java.util.List;
 @ToString
 public class EvaluationList {
     String category;
+    String title;
+    int type;
     List<EvaluationQuestion> questions;
 }

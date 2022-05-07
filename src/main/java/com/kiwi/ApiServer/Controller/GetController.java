@@ -1,10 +1,7 @@
 package com.kiwi.ApiServer.Controller;
 
 import com.kiwi.ApiServer.DAO.SQLDAO;
-import com.kiwi.ApiServer.DTO.Evaluation.Evaluation;
-import com.kiwi.ApiServer.DTO.Evaluation.EvaluationCategory;
-import com.kiwi.ApiServer.DTO.Evaluation.EvaluationList;
-import com.kiwi.ApiServer.DTO.Evaluation.EvaluationQuestion;
+import com.kiwi.ApiServer.DTO.Evaluation.*;
 import com.kiwi.ApiServer.DTO.User;
 import com.kiwi.ApiServer.Response.SingleResult;
 import com.kiwi.ApiServer.Security.JwtTokenProvider;

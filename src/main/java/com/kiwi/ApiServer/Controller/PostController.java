@@ -156,20 +156,27 @@ public class PostController {
         SQLDAO sqldao = new SQLDAO();
 
         int evaluationId = sqldao.insertEvaluation(evaluation.getName());
-        for(EvaluationList evaluationList : evaluation.getEvaluationList()){
+        for(EvaluationList evaluationList: evaluation.getEvaluationList()){
             String category = evaluationList.getCategory();
-            for(EvaluationQuestion evaluationQuestion: evaluationList.getQuestions()){
-                int type = evaluationQuestion.getType();
-                String title = evaluationQuestion.getTitle();
-                int question_id = sqldao.insertEvaluationQuestion(evaluationId,type,title,category);
-                System.out.println(question_id);
-//                if(type == 1){
-//                    for(String choice : evaluationQuestion.getData()){
-//                        sqldao.insertEvaluationChoice(question_id,choice);
-//                    }
-//                }
-            }
+            String title = evaluationList.getTitle();
+            int type = evaluationList.getType();
+            sqldao.insertEvaluationQuestion(evaluationId,type,title,category);
         }
+//        int evaluationId = sqldao.insertEvaluation(evaluation.getName());
+//        for(EvaluationList evaluationList : evaluation.getEvaluationList()){
+//            String category = evaluationList.getCategory();
+//            for(EvaluationQuestion evaluationQuestion: evaluationList.getQuestions()){
+//                int type = evaluationQuestion.getType();
+//                String title = evaluationQuestion.getTitle();
+//                int question_id = sqldao.insertEvaluationQuestion(evaluationId,type,title,category);
+//                System.out.println(question_id);
+////                if(type == 1){
+////                    for(String choice : evaluationQuestion.getData()){
+////                        sqldao.insertEvaluationChoice(question_id,choice);
+////                    }
+////                }
+//            }
+//        }
 
         result.setResult(200);
         result.setMessage("SUCCESS");
