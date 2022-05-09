@@ -150,12 +150,15 @@ public class PostController {
     }
 
     @PostMapping(value = "createEvaluation")
-    public SingleResult createEvaluation (@RequestBody Evaluation evaluation) throws Exception{
+    public SingleResult createEvaluation (HttpServletRequest request, @RequestBody Evaluation evaluation) throws Exception{
         SingleResult result = new SingleResult();
-        System.out.println(evaluation.toString());
         SQLDAO sqldao = new SQLDAO();
 
-        int evaluationId = sqldao.insertEvaluation(evaluation.getName());
+        String token = request.getHeader("X-AUTH-TOKEN");
+        String email = jwtTokenProvider.getUser(token);
+        int user_id = sqldao.getUserIdFromEmail(email);
+
+        int evaluationId = sqldao.insertEvaluation(evaluation.getName(),user_id);
         for(EvaluationList evaluationList: evaluation.getEvaluationList()){
             String category = evaluationList.getCategory();
             String title = evaluationList.getTitle();

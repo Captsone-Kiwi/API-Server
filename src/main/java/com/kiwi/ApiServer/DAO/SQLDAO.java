@@ -104,14 +104,31 @@ public class SQLDAO {
         return pstmt.executeQuery();
     }
 
-    public int insertEvaluation(String name) throws Exception {
+    public int getUserIdFromEmail(String email) throws Exception {
+        String query = "SELECT id FROM user WHERE email = (?)";
+        PreparedStatement pstmt = conn.prepareStatement(query);
+        pstmt.setString(1,email);
+        pstmt.executeQuery();
+
+        ResultSet result = pstmt.executeQuery();
+
+        int id = 0;
+        if(result.next())
+            id = result.getInt(1);
+        return id;
+
+    }
+
+
+    public int insertEvaluation(String name,int user_id) throws Exception {
 //        String query = "INSERT INTO interview_participant(interview_id, user_email) " +
 //                "VALUES(?,?)";
-        String query =  "INSERT INTO evaluation(name) " +
+        String query =  "INSERT INTO evaluation(name,user_id) " +
 //                        "OUTPUT id " +
-                        "VALUES (?)";
+                        "VALUES (?,?)";
         PreparedStatement pstmt = conn.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
         pstmt.setString(1,name);
+        pstmt.setInt(2,user_id);
         pstmt.executeUpdate();
 
         int id = 0;
@@ -143,6 +160,23 @@ public class SQLDAO {
                 throw new SQLException("Creating evaluation category failed");
         }
         return id;
+    }
+
+    public List<Integer> getEvaluationIdListFromUserId(int user_id) throws Exception{
+        String query = "SELECT id FROM evaluation " +
+                "WHERE user_id = (?)";
+        PreparedStatement pstmt = conn.prepareStatement(query);
+        pstmt.setInt(1,user_id);
+
+        ResultSet result = pstmt.executeQuery();
+        List<Integer> evaluationIdList = new ArrayList<>();
+        while(result.next()){
+            int evaluationId = result.getInt("id");
+            evaluationIdList.add(evaluationId);
+        }
+
+        return evaluationIdList;
+
     }
 
     public void insertEvaluationChoice(int question_id, String data) throws Exception {

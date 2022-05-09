@@ -133,6 +133,24 @@ public class GetController {
         return result;
     }
 
+    @GetMapping("/getEvaluationIdList")
+    public SingleResult getEvaluationIdList(HttpServletRequest request) throws Exception{
+        SingleResult result = new SingleResult();
+        SQLDAO sqldao = new SQLDAO();
+
+        String token = request.getHeader("X-AUTH-TOKEN");
+        String email = jwtTokenProvider.getUser(token);
+        int user_id = sqldao.getUserIdFromEmail(email);
+
+        List<Integer> evaluationIdList = sqldao.getEvaluationIdListFromUserId(user_id);
+
+        result.setResult(200);
+        result.setMessage("SUCCESS");
+        result.setData(evaluationIdList);
+        return result;
+    }
+
+
     @GetMapping("/getEvaluation")
     public SingleResult getEvaluation(@RequestParam String evaluationId) throws Exception {
         SingleResult result = new SingleResult();
