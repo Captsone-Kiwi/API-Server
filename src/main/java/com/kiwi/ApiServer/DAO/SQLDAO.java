@@ -240,8 +240,22 @@ public class SQLDAO {
         while(result.next()){
             data.add(result.getString(1));
         }
-
         return data;
+    }
+
+    public void deleteEvaluationFromEvaluationId(int evaluationId) throws Exception{
+        String evaluationQuery = "DELETE FROM `evaluation` WHERE id = (?)";
+        String evaluationCategoryQuery = "DELETE FROM `evaluation_category` WHERE evaluation_id = (?)";
+
+        PreparedStatement evaluationPstmt = conn.prepareStatement(evaluationQuery);
+        PreparedStatement evaluationCategoryPstmt = conn.prepareStatement(evaluationCategoryQuery);
+
+        evaluationPstmt.setInt(1, evaluationId);
+        evaluationCategoryPstmt.setInt(1,evaluationId);
+
+        evaluationPstmt.executeUpdate();
+        evaluationCategoryPstmt.executeUpdate();
+
     }
 
 

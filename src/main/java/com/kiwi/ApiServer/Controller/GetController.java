@@ -207,6 +207,18 @@ public class GetController {
         return result;
     }
 
+    @GetMapping("/deleteEvaluation")
+    public SingleResult deleteEvaluation(@RequestParam int evaluationId) throws Exception{
+        SingleResult result = new SingleResult();
+        SQLDAO sqldao = new SQLDAO();
+
+        sqldao.deleteEvaluationFromEvaluationId(evaluationId);
+
+        result.setResult(200);
+        result.setMessage("SUCCESS");
+        return result;
+    }
+
     @GetMapping("/getResume")
     public ResponseEntity<InputStreamResource> getResume(@RequestParam String name){
         String path = "./uploads/";
