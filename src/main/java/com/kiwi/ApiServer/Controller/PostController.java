@@ -163,7 +163,8 @@ public class PostController {
             String category = evaluationList.getCategory();
             String title = evaluationList.getTitle();
             int type = evaluationList.getType();
-            sqldao.insertEvaluationQuestion(evaluationId,type,title,category);
+            int range = evaluationList.getRange();
+            sqldao.insertEvaluationQuestion(evaluationId,type,title,category,range);
         }
 //        int evaluationId = sqldao.insertEvaluation(evaluation.getName());
 //        for(EvaluationList evaluationList : evaluation.getEvaluationList()){

@@ -12,5 +12,6 @@ import java.util.List;
 public class EvaluationQuestion {
     String title;
     int type;
-    List<String> data;
+//    List<String> data;
+    int range;
 }

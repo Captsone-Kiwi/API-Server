@@ -13,5 +13,6 @@ public class EvaluationList {
     String category;
     String title;
     int type;
+    int range;
     List<EvaluationQuestion> questions;
 }
