@@ -2,6 +2,7 @@ package com.kiwi.ApiServer.Controller;
 
 import com.kiwi.ApiServer.DAO.SQLDAO;
 import com.kiwi.ApiServer.DTO.Evaluation.*;
+import com.kiwi.ApiServer.DTO.Interview.InterviewParticipant;
 import com.kiwi.ApiServer.DTO.User;
 import com.kiwi.ApiServer.Response.SingleResult;
 import com.kiwi.ApiServer.Security.JwtTokenProvider;
@@ -119,14 +120,7 @@ public class GetController {
         SingleResult result = new SingleResult();
 
         SQLDAO sqldao = new SQLDAO();
-        ResultSet participantList = sqldao.getParticipantFromInterviewId(id);
-        List<String> data = new ArrayList<>();
-
-        while(participantList.next()){
-            String participant = participantList.getString("user_email");
-            data.add(participant);
-        }
-
+        List<InterviewParticipant> data = sqldao.getParticipantFromInterviewId(id);
         result.setResult(200);
         result.setMessage("success");
         result.setData(data);

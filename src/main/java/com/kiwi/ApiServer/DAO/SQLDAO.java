@@ -1,6 +1,7 @@
 package com.kiwi.ApiServer.DAO;
 
 import com.kiwi.ApiServer.DTO.Evaluation.EvaluationCategory;
+import com.kiwi.ApiServer.DTO.Interview.InterviewParticipant;
 
 import javax.swing.plaf.nimbus.State;
 import java.sql.*;
@@ -82,12 +83,29 @@ public class SQLDAO {
         pstmt.executeUpdate();
     }
 
-    public ResultSet getParticipantFromInterviewId(String id) throws Exception{
-        String query = "SELECT user_email FROM interview_participant WHERE interview_id = (?)";
+    public List<InterviewParticipant> getParticipantFromInterviewId(String id) throws Exception{
+//        String query = "SELECT user_email FROM interview_participant WHERE interview_id = (?)";
+        String query = "select distinct (email) ,name " +
+                "from `interview_participant` " +
+                "inner join user " +
+                "on user.email = `interview_participant`.user_email " +
+                "where interview_id = (?)";
+
         PreparedStatement pstmt = conn.prepareStatement(query);
         pstmt.setString(1,id);
         ResultSet result = pstmt.executeQuery();
-        return result;
+        List<InterviewParticipant> interviewParticipantList = new ArrayList<>();
+        while(result.next()){
+            InterviewParticipant interviewParticipant = new InterviewParticipant();
+
+            String email = result.getString("email");
+            String name = result.getString("name");
+
+            interviewParticipant.setEmail(email);
+            interviewParticipant.setName(name);
+            interviewParticipantList.add(interviewParticipant);
+        }
+        return interviewParticipantList;
     }
 
     public ResultSet getUsernameFromEmail(String email) throws Exception{
