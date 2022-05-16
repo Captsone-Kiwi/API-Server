@@ -105,6 +105,7 @@ public class SQLDAO {
             interviewParticipant.setName(name);
             interviewParticipantList.add(interviewParticipant);
         }
+        
         return interviewParticipantList;
     }
 
@@ -126,7 +127,6 @@ public class SQLDAO {
         String query = "SELECT id FROM user WHERE email = (?)";
         PreparedStatement pstmt = conn.prepareStatement(query);
         pstmt.setString(1,email);
-        pstmt.executeQuery();
 
         ResultSet result = pstmt.executeQuery();
 
@@ -134,8 +134,35 @@ public class SQLDAO {
         if(result.next())
             id = result.getInt(1);
         return id;
-
     }
+
+    public List<String> getResumeListFromUserId(int user_id) throws Exception{
+        String query = "SELECT title FROM resume WHERE user_id = (?)";
+        PreparedStatement pstmt = conn.prepareStatement(query);
+        pstmt.setInt(1,user_id);
+
+        List<String> resumeList  = new ArrayList<>();
+        ResultSet result = pstmt.executeQuery();
+
+        while(result.next()){
+            String title = result.getString(1);
+            resumeList.add(title);
+        }
+
+        return resumeList;
+    }
+
+    public void insertResume(int user_id, String title) throws Exception {
+        String query = "INSERT INTO resume(user_id,title) " +
+                "VALUES (?,?)";
+        PreparedStatement pstmt = conn.prepareStatement(query);
+
+        pstmt.setInt(1,user_id);
+        pstmt.setString(2,title);
+
+        pstmt.executeUpdate();
+    }
+
 
 
     public int insertEvaluation(String name,int user_id) throws Exception {

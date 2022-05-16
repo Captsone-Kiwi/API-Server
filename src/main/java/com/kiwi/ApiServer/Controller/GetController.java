@@ -237,6 +237,23 @@ public class GetController {
 
     }
 
+    @GetMapping("/getCreatedResumeList")
+    public SingleResult getCreatedResumeList(HttpServletRequest request) throws Exception{
+        SingleResult result = new SingleResult();
+        SQLDAO sqldao = new SQLDAO();
+
+        String token = request.getHeader("X-AUTH-TOKEN");
+        String email = jwtTokenProvider.getUser(token);
+        int user_id = sqldao.getUserIdFromEmail(email);
+
+        List<String> data = sqldao.getResumeListFromUserId(user_id);
+
+        result.setResult(200);
+        result.setMessage("SUCCESS");
+        result.setData(data);
+        return result;
+    }
+
     @GetMapping("/viewpdf")
     public ResponseEntity<InputStreamResource> getViewPdf() {
         System.out.println("connected");

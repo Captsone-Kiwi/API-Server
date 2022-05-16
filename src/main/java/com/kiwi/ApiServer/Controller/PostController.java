@@ -136,7 +136,14 @@ public class PostController {
     }
 
     @PostMapping(value = "insertResume")
-    public ResponseEntity<ResponseMessage> insertResume(@RequestParam("file") MultipartFile file){
+    public ResponseEntity<ResponseMessage> insertResume(HttpServletRequest request, @RequestParam("file") MultipartFile file) throws Exception{
+        SQLDAO sqldao = new SQLDAO();
+        String token = request.getHeader("X-AUTH-TOKEN");
+        String email = jwtTokenProvider.getUser(token);
+        int user_id = sqldao.getUserIdFromEmail(email);
+
+        sqldao.insertResume(user_id,file.getOriginalFilename());
+
         String message = "";
         try{
             storageService.save(file);
