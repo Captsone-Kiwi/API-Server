@@ -163,6 +163,16 @@ public class SQLDAO {
         pstmt.executeUpdate();
     }
 
+    public void deleteResume(int user_id, String file_name) throws Exception {
+        String query = "DELETE FROM `resume` WHERE user_id=(?) and title=(?)";
+        PreparedStatement pstmt = conn.prepareStatement(query);
+
+        pstmt.setInt(1,user_id);
+        pstmt.setString(2,file_name);
+
+        pstmt.executeUpdate();
+    }
+
 
 
     public int insertEvaluation(String name,int user_id) throws Exception {

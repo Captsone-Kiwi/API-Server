@@ -234,7 +234,38 @@ public class GetController {
                 .contentLength(file.length())
                 .contentType(MediaType.parseMediaType("application/pdf"))
                 .body(resource);
+    }
 
+    @GetMapping("/deleteResume")
+    public SingleResult deleteResume(HttpServletRequest request, @RequestParam String name) throws Exception{
+        SingleResult result = new SingleResult();
+        String path = "./uploads/";
+        String file_name = name;
+        File file = new File(path + file_name);
+
+        if( file.exists() ){
+            if(file.delete()){
+                SQLDAO sqldao = new SQLDAO();
+                String token = request.getHeader("X-AUTH-TOKEN");
+                String email = jwtTokenProvider.getUser(token);
+                int user_id = sqldao.getUserIdFromEmail(email);
+
+                sqldao.deleteResume(user_id, file_name);
+//                System.out.println("파일삭제 성공");
+                result.setResult(200);
+                result.setMessage("SUCCESS");
+            }else{
+//                System.out.println("파일삭제 실패");
+                result.setResult(401);
+                result.setMessage("FAILED");
+            }
+        } else{
+//            System.out.println("파일이 존재하지 않습니다.");
+            result.setResult(402);
+            result.setMessage("FILE NOT EXIST ERROR");
+        }
+
+        return result;
     }
 
     @GetMapping("/getCreatedResumeList")
