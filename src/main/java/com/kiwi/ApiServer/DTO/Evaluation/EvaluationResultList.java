@@ -9,10 +9,6 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-public class EvaluationQuestion {
-    String title;
-    int type;
-//    List<String> data;
-//    int range;
-    String data;
+public class EvaluationResultList {
+    List<EvaluationResult> evaluationResultList;
 }

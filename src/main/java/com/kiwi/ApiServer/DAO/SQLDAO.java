@@ -196,8 +196,8 @@ public class SQLDAO {
         return id;
     }
 
-    public int insertEvaluationQuestion(int evaluationId, int type, String title, String category,int range) throws Exception {
-        String query = "INSERT INTO evaluation_category(evaluation_id, type, title, category, `range`) " +
+    public int insertEvaluationQuestion(int evaluationId, int type, String title, String category,int data) throws Exception {
+        String query = "INSERT INTO evaluation_category(evaluation_id, type, title, category, `data`) " +
                 "VALUES (?,?,?,?,?)";
 
         PreparedStatement pstmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
@@ -205,7 +205,7 @@ public class SQLDAO {
         pstmt.setString(2, Integer.toString(type));
         pstmt.setString(3, title);
         pstmt.setString(4, category);
-        pstmt.setInt(5, range);
+        pstmt.setInt(5, data);
         pstmt.executeUpdate();
 
         int id = 0;
@@ -261,7 +261,7 @@ public class SQLDAO {
 
     public List<EvaluationCategory> getEvaluationCategoryFromId(String evaluationId) throws Exception{
         List<EvaluationCategory> evaluationCategoryList = new ArrayList<>();
-        String query = "SELECT question_id, evaluation_id, type, title, category, `range` " +
+        String query = "SELECT question_id, evaluation_id, type, title, category, `data` " +
                 "FROM evaluation_category " +
                 "WHERE evaluation_id = (?)";
 
@@ -276,7 +276,7 @@ public class SQLDAO {
             evaluationCategory.setType(result.getInt(3));
             evaluationCategory.setTitle(result.getString(4));
             evaluationCategory.setCategory(result.getString(5));
-            evaluationCategory.setRange(result.getInt(6));
+            evaluationCategory.setData(result.getInt(6));
 
             evaluationCategoryList.add(evaluationCategory);
         }

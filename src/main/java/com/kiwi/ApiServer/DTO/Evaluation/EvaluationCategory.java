@@ -14,5 +14,5 @@ public class EvaluationCategory {
     int type;
     String title;
     String category;
-    int range;
+    int data;
 }

@@ -4,9 +4,7 @@ import com.kiwi.ApiServer.DAO.InterviewRepository;
 import com.kiwi.ApiServer.DAO.SQLDAO;
 import com.kiwi.ApiServer.DAO.UserRepository;
 import com.kiwi.ApiServer.DTO.*;
-import com.kiwi.ApiServer.DTO.Evaluation.Evaluation;
-import com.kiwi.ApiServer.DTO.Evaluation.EvaluationList;
-import com.kiwi.ApiServer.DTO.Evaluation.EvaluationQuestion;
+import com.kiwi.ApiServer.DTO.Evaluation.*;
 import com.kiwi.ApiServer.DTO.Interview.CreateInterview;
 import com.kiwi.ApiServer.Response.SingleResult;
 import com.kiwi.ApiServer.Security.JwtTokenProvider;
@@ -21,9 +19,14 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -170,8 +173,14 @@ public class PostController {
             String category = evaluationList.getCategory();
             String title = evaluationList.getTitle();
             int type = evaluationList.getType();
-            int range = evaluationList.getRange();
-            sqldao.insertEvaluationQuestion(evaluationId,type,title,category,range);
+            System.out.println(evaluationList.getData());
+            int data = 0;
+            try{
+                data = Integer.parseInt(evaluationList.getData());
+            } catch (Exception exception) {
+                System.out.println(exception);
+            }
+            sqldao.insertEvaluationQuestion(evaluationId,type,title,category,data);
         }
 //        int evaluationId = sqldao.insertEvaluation(evaluation.getName());
 //        for(EvaluationList evaluationList : evaluation.getEvaluationList()){
@@ -193,6 +202,67 @@ public class PostController {
         result.setMessage("SUCCESS");
 
         return result;
+    }
+
+    @PostMapping(value = "createEvaluationResult")
+    public SingleResult createEvaluationResult (HttpServletRequest request, @RequestBody EvaluationResultList evaluationResultList) throws Exception{
+        SingleResult singleResult = new SingleResult();
+
+        SQLDAO sqldao = new SQLDAO();
+        String token = request.getHeader("X-AUTH-TOKEN");
+        String email = jwtTokenProvider.getUser(token);
+
+//        면접관 이름
+        ResultSet tmp = sqldao.getUsernameFromEmail(email);
+        String interviewer = "";
+        while(tmp.next())
+            interviewer = tmp.getString(1);
+
+        for(EvaluationResult evaluationResult : evaluationResultList.getEvaluationResultList()){
+//          면접자 이름
+            String interviewee = evaluationResult.getLabel();
+
+            Evaluation evaluation = evaluationResult.getEvaluation();
+            List<EvaluationList> evaluationListList = evaluation.getEvaluationList();
+
+            String evaluationName = evaluation.getName();
+
+            for(EvaluationList evlList : evaluationListList){
+                List<EvaluationQuestion> evaluationQuestionList = evlList.getQuestions();
+
+                String category = evlList.getCategory();
+
+                for(EvaluationQuestion evaluationQuestion : evaluationQuestionList){
+                    String questionName = evaluationQuestion.getTitle();
+                    int type = evaluationQuestion.getType();
+                    String data = evaluationQuestion.getData();
+
+                    String path = "./results/";
+                    String fileName = evaluationName + ".csv";
+                    File csv = new File(path + fileName);
+                    BufferedWriter bw = null;
+                    try{
+                        bw = new BufferedWriter(new FileWriter(csv, true));
+                        String line = interviewee + "," + evaluationName + "," + category + "," + Integer.toString(type) + "," +  questionName + "," +  data;
+                        bw.write(line);
+                        bw.newLine();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } finally {
+                        try {
+                            if (bw != null) {
+                                bw.flush(); // 남아있는 데이터까지 보내 준다
+                                bw.close(); // 사용한 BufferedWriter를 닫아 준다
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+        }
+
+        return singleResult;
     }
 
 //    @PostMapping(value = "upload")

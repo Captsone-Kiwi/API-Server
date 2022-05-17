@@ -13,6 +13,6 @@ public class EvaluationList {
     String category;
     String title;
     int type;
-    int range;
+    String data;
     List<EvaluationQuestion> questions;
 }
