@@ -15,7 +15,7 @@ import java.util.stream.Stream;
 
 @Service
 public class FileStorageServiceImpl implements FileStorageService{
-    private final Path root = Paths.get("uploads");
+    private final Path root = Paths.get("results");
 
     @Override
     public void init() {
@@ -39,6 +39,7 @@ public class FileStorageServiceImpl implements FileStorageService{
     public Resource load(String filename) {
         try{
             Path file = root.resolve(filename);
+            System.out.println(file.toUri());
             Resource resource = new UrlResource(file.toUri());
 
             if(resource.exists() || resource.isReadable()){
