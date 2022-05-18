@@ -224,7 +224,7 @@ public class GetController {
 
     @GetMapping("/getResume")
     public ResponseEntity<InputStreamResource> getResume(@RequestParam String name){
-        String path = "./uploads/";
+        String path = "./results/";
         String file_name = name + ".pdf";
         System.out.println(file_name);
         File file = new File(path + file_name);
