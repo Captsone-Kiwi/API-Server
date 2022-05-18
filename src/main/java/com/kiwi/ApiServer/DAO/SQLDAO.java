@@ -85,7 +85,7 @@ public class SQLDAO {
 
     public List<InterviewParticipant> getParticipantFromInterviewId(String id) throws Exception{
 //        String query = "SELECT user_email FROM interview_participant WHERE interview_id = (?)";
-        String query = "select distinct (email) ,name " +
+        String query = "select distinct (email) ,name , member_type " +
                 "from `interview_participant` " +
                 "inner join user " +
                 "on user.email = `interview_participant`.user_email " +
@@ -100,9 +100,11 @@ public class SQLDAO {
 
             String email = result.getString("email");
             String name = result.getString("name");
+            int member_type = result.getInt("member_type");
 
             interviewParticipant.setEmail(email);
             interviewParticipant.setName(name);
+            interviewParticipant.setMember_type(member_type);
             interviewParticipantList.add(interviewParticipant);
         }
         

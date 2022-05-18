@@ -8,4 +8,5 @@ import lombok.Setter;
 public class InterviewParticipant {
     String email;
     String name;
+    int member_type;
 }
