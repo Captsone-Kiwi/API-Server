@@ -262,8 +262,8 @@ public class GetController {
     @GetMapping("/deleteResume")
     public SingleResult deleteResume(HttpServletRequest request, @RequestParam String name) throws Exception{
         SingleResult result = new SingleResult();
-        String path = "./uploads/";
-        String file_name = name;
+        String path = "./results/";
+        String file_name = name+".pdf";
         File file = new File(path + file_name);
 
         if( file.exists() ){
