@@ -2,22 +2,25 @@ package com.kiwi.ApiServer.DAO;
 
 import com.kiwi.ApiServer.DTO.Evaluation.EvaluationCategory;
 import com.kiwi.ApiServer.DTO.Interview.InterviewParticipant;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.EnvironmentAware;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 
 import javax.swing.plaf.nimbus.State;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-
-public class SQLDAO {
+public class SQLDAO{
     private static Connection conn;
     private static final String DRIVER = "com.mysql.cj.jdbc.Driver";
-//
-    private static final String URL = "JDBC:MYSQL://localhost:3306/tutum?useSSL=false&serverTimezone=Asia/Seoul";
-    private static final String USER = "root";
-//
-    private static final String PW = "qwer1234";
 
+    private static String URL = "JDBC:MYSQL://localhost:3306/tutum?useSSL=false&serverTimezone=Asia/Seoul";
+    private static String USER = "root";
+    private static String PW = "qwer1234";
     public SQLDAO() throws Exception{
         conn = DriverManager.getConnection(URL,USER,PW);
     }

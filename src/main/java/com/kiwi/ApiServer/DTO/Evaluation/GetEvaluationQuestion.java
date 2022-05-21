@@ -4,15 +4,12 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.List;
-
 @Getter
 @Setter
 @ToString
-public class EvaluationList<T> {
-    String category;
+public class GetEvaluationQuestion {
     String title;
     int type;
-    String data;
-    List<T> questions;
+    String range;
+    int data;
 }

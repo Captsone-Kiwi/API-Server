@@ -12,6 +12,8 @@ import com.kiwi.ApiServer.Service.FileStorageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -35,6 +37,8 @@ import java.util.Map;
 public class PostController {
     @Autowired
     FileStorageService storageService;
+    @Autowired
+    ApplicationContext context;
 
 //  password encoding -> 아직 적용 안함
     private final PasswordEncoder passwordEncoder;
@@ -82,6 +86,9 @@ public class PostController {
     // 로그인
     @PostMapping("/signin")
     public SingleResult login(@RequestBody Map<String, String> user) {
+//        Environment env = context.getEnvironment();
+//        System.out.println(env.getProperty("spring.datasource.url"));
+
         SingleResult result = new SingleResult();
 
 //        User member = userRepository.findByEmail(user.get("email"))

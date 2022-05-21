@@ -11,6 +11,8 @@ import com.kiwi.ApiServer.Table.interview;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.core.env.Environment;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -36,11 +38,16 @@ public class GetController {
 
     @Autowired
     private FileStorageService fileStorageService;
+    @Autowired
+    ApplicationContext context;
 
     private final JwtTokenProvider jwtTokenProvider;
 
     @GetMapping("/user/test")
     public String test(){
+//        Environment env = context.getEnvironment();
+//        System.out.println(env.getProperty("spring.datasource.url"));
+
         return "success";
     }
 
@@ -48,6 +55,8 @@ public class GetController {
     public SingleResult getInterview(HttpServletRequest request) throws Exception{
         SingleResult res = new SingleResult();
         List<interview> data = new ArrayList<>();
+        Environment env = context.getEnvironment();
+
         SQLDAO sqldao = new SQLDAO();
 
         String token = request.getHeader("X-AUTH-TOKEN");
@@ -170,10 +179,13 @@ public class GetController {
                 if(evaluationList.getCategory().equals(evaluationCategory.getCategory())){
                     containsCategory = true;
 
-                    EvaluationQuestion evaluationQuestion = new EvaluationQuestion();
+//                    EvaluationQuestion evaluationQuestion = new EvaluationQuestion();
+                    GetEvaluationQuestion evaluationQuestion = new GetEvaluationQuestion();
+
                     evaluationQuestion.setTitle(evaluationCategory.getTitle());
                     evaluationQuestion.setType(evaluationCategory.getType());
-                    evaluationQuestion.setData(Integer.toString(evaluationCategory.getData()));
+                    evaluationQuestion.setRange(Integer.toString(evaluationCategory.getData()));
+                    evaluationQuestion.setData(0);
 
 //                    if(evaluationQuestion.getType() == 1){
 //                        List<String> data = sqldao.getEvaluationChoiceFromQuestionId(evaluationCategory.getQuestion_id());
@@ -187,12 +199,15 @@ public class GetController {
             if(!containsCategory){
                 EvaluationList evaluationList = new EvaluationList();
                 evaluationList.setQuestions(new ArrayList<>());
-                EvaluationQuestion evaluationQuestion = new EvaluationQuestion();
+//                EvaluationQuestion evaluationQuestion = new EvaluationQuestion();
+                GetEvaluationQuestion evaluationQuestion = new GetEvaluationQuestion();
 
                 String category = evaluationCategory.getCategory();
                 evaluationQuestion.setTitle(evaluationCategory.getTitle());
                 evaluationQuestion.setType(evaluationCategory.getType());
-                evaluationQuestion.setData(Integer.toString(evaluationCategory.getData()));
+                evaluationQuestion.setRange(Integer.toString(evaluationCategory.getData()));
+                evaluationQuestion.setData(0);
+
 
 //                if(evaluationQuestion.getType() == 1){
 //                    List<String> data = sqldao.getEvaluationChoiceFromQuestionId(evaluationCategory.getQuestion_id());
