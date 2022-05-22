@@ -12,7 +12,9 @@ import org.springframework.core.env.Environment;
 import javax.swing.plaf.nimbus.State;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SQLDAO{
     private static Connection conn;
@@ -223,17 +225,22 @@ public class SQLDAO{
         return id;
     }
 
-    public List<Integer> getEvaluationIdListFromUserId(int user_id) throws Exception{
-        String query = "SELECT id FROM evaluation " +
+//    public List<Integer> getEvaluationIdListFromUserId(int user_id) throws Exception{
+public List<Map<Integer,String>> getEvaluationIdListFromUserId(int user_id) throws Exception{
+        String query = "SELECT id, name FROM evaluation " +
                 "WHERE user_id = (?)";
         PreparedStatement pstmt = conn.prepareStatement(query);
         pstmt.setInt(1,user_id);
 
         ResultSet result = pstmt.executeQuery();
-        List<Integer> evaluationIdList = new ArrayList<>();
+//        List<Integer> evaluationIdList = new ArrayList<>();
+        List<Map<Integer,String>> evaluationIdList = new ArrayList<>();
         while(result.next()){
             int evaluationId = result.getInt("id");
-            evaluationIdList.add(evaluationId);
+            String evaluationName = result.getString("name");
+            Map<Integer, String> map = new HashMap<>();
+            map.put(evaluationId, evaluationName);
+            evaluationIdList.add(map);
         }
 
         return evaluationIdList;

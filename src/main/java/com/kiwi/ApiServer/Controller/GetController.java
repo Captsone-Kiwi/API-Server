@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -153,7 +154,7 @@ public class GetController {
         String email = jwtTokenProvider.getUser(token);
         int user_id = sqldao.getUserIdFromEmail(email);
 
-        List<Integer> evaluationIdList = sqldao.getEvaluationIdListFromUserId(user_id);
+        List<Map<Integer,String>> evaluationIdList = sqldao.getEvaluationIdListFromUserId(user_id);
 
         result.setResult(200);
         result.setMessage("SUCCESS");
