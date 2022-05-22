@@ -154,7 +154,7 @@ public class GetController {
         String email = jwtTokenProvider.getUser(token);
         int user_id = sqldao.getUserIdFromEmail(email);
 
-        List<Map<Integer,String>> evaluationIdList = sqldao.getEvaluationIdListFromUserId(user_id);
+        List<EvaluationIdName> evaluationIdList = sqldao.getEvaluationIdListFromUserId(user_id);
 
         result.setResult(200);
         result.setMessage("SUCCESS");

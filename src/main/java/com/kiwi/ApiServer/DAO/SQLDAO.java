@@ -1,6 +1,7 @@
 package com.kiwi.ApiServer.DAO;
 
 import com.kiwi.ApiServer.DTO.Evaluation.EvaluationCategory;
+import com.kiwi.ApiServer.DTO.Evaluation.EvaluationIdName;
 import com.kiwi.ApiServer.DTO.Interview.InterviewParticipant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -226,7 +227,7 @@ public class SQLDAO{
     }
 
 //    public List<Integer> getEvaluationIdListFromUserId(int user_id) throws Exception{
-public List<Map<Integer,String>> getEvaluationIdListFromUserId(int user_id) throws Exception{
+public List<EvaluationIdName> getEvaluationIdListFromUserId(int user_id) throws Exception{
         String query = "SELECT id, name FROM evaluation " +
                 "WHERE user_id = (?)";
         PreparedStatement pstmt = conn.prepareStatement(query);
@@ -234,13 +235,16 @@ public List<Map<Integer,String>> getEvaluationIdListFromUserId(int user_id) thro
 
         ResultSet result = pstmt.executeQuery();
 //        List<Integer> evaluationIdList = new ArrayList<>();
-        List<Map<Integer,String>> evaluationIdList = new ArrayList<>();
+        List<EvaluationIdName> evaluationIdList = new ArrayList<>();
         while(result.next()){
+            EvaluationIdName evaluationIdName = new EvaluationIdName();
             int evaluationId = result.getInt("id");
             String evaluationName = result.getString("name");
-            Map<Integer, String> map = new HashMap<>();
-            map.put(evaluationId, evaluationName);
-            evaluationIdList.add(map);
+
+            evaluationIdName.setId(evaluationId);
+            evaluationIdName.setName(evaluationName);
+
+            evaluationIdList.add(evaluationIdName);
         }
 
         return evaluationIdList;
