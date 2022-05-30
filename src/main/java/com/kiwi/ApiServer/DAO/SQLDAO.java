@@ -21,9 +21,9 @@ public class SQLDAO{
     private static Connection conn;
     private static final String DRIVER = "com.mysql.cj.jdbc.Driver";
 
-    private static String URL = "JDBC:MYSQL://capstone-database.c1stmnnp25wf.us-east-1.rds.amazonaws.com:3306/kiwi?useSSL=false&serverTimezone=Asia/Seoul";
-    private static String USER = "admin";
-    private static String PW = "qwer1234";
+    private static String URL = "JDBC:MYSQL://[DB IP]:[DB PORT]/[DB NAME]?useSSL=false&serverTimezone=Asia/Seoul";
+    private static String USER = "[DB username]";
+    private static String PW = "[DB PASSWORD]";
     public SQLDAO() throws Exception{
         conn = DriverManager.getConnection(URL,USER,PW);
     }
