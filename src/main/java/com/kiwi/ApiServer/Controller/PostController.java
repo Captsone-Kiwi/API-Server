@@ -6,9 +6,7 @@ import com.kiwi.ApiServer.DAO.UserRepository;
 import com.kiwi.ApiServer.DTO.*;
 import com.kiwi.ApiServer.DTO.Evaluation.*;
 import com.kiwi.ApiServer.DTO.Interview.CreateInterview;
-import com.kiwi.ApiServer.Response.HanKeyToEngKey;
 import com.kiwi.ApiServer.Response.SingleResult;
-import com.kiwi.ApiServer.Response.Translator;
 import com.kiwi.ApiServer.Security.JwtTokenProvider;
 import com.kiwi.ApiServer.Service.FileStorageService;
 import lombok.RequiredArgsConstructor;
@@ -16,11 +14,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.tika.parser.txt.CharsetDetector;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,8 +25,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.sql.ResultSet;
 import java.util.Collections;
 import java.util.Iterator;
@@ -158,17 +154,19 @@ public class PostController {
         String email = jwtTokenProvider.getUser(token);
         int user_id = sqldao.getUserIdFromEmail(email);
         sqldao.insertResume(user_id,file.getOriginalFilename());
-
-        CharsetDetector detector = new CharsetDetector();
-        String name = URLEncoder.encode(file.getOriginalFilename());
+//
+//        if(file.getOriginalFilename().equals("백소현")){
+//            System.out.println(1);
+//        }
+//        String name = URLEncoder.encode(file.getOriginalFilename());
 //        final HanKeyToEngKey hanKeyToEngKey = new HanKeyToEngKey();
 //        String korToEng = hanKeyToEngKey.getHanKeyToEngKey(t);
-        System.out.println(name);
+//        System.out.println(name);
 
         String message = "";
         try{
-//            storageService.save(file,file.getOriginalFilename());
-            storageService.save(file,name);
+            storageService.save(file,file.getOriginalFilename());
+//            storageService.save(file,name);
             message = "Uploaded the file sucessfully: " + file.getOriginalFilename();
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
         } catch(Exception e){

@@ -21,12 +21,10 @@ public class SQLDAO{
     private static Connection conn;
     private static final String DRIVER = "com.mysql.cj.jdbc.Driver";
 
-//    private static String URL = "JDBC:MYSQL://[DB IP]:[DB PORT]/[DB NAME]?useSSL=false&serverTimezone=Asia/Seoul";
-//    private static String USER = "[DB username]";
-//    private static String PW = "[DB PASSWORD]";
-    private static String URL = "JDBC:MYSQL://[]:[]/[]?useSSL=false&serverTimezone=Asia/Seoul";
-    private static String USER = "[]";
-    private static String PW = "[]";
+    private static String URL = "JDBC:MYSQL://[DB IP]:[DB PORT]/[DB NAME]?useSSL=false&serverTimezone=Asia/Seoul";
+    private static String USER = "[DB username]";
+    private static String PW = "[DB PASSWORD]";
+
     public SQLDAO() throws Exception{
         conn = DriverManager.getConnection(URL,USER,PW);
     }
