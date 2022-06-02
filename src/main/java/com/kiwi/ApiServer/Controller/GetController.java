@@ -4,6 +4,7 @@ import com.kiwi.ApiServer.DAO.SQLDAO;
 import com.kiwi.ApiServer.DTO.Evaluation.*;
 import com.kiwi.ApiServer.DTO.Interview.InterviewParticipant;
 import com.kiwi.ApiServer.DTO.User;
+import com.kiwi.ApiServer.Response.HanKeyToEngKey;
 import com.kiwi.ApiServer.Response.SingleResult;
 import com.kiwi.ApiServer.Security.JwtTokenProvider;
 import com.kiwi.ApiServer.Service.FileStorageService;
@@ -27,6 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
@@ -241,8 +243,12 @@ public class GetController {
     @GetMapping("/getResume")
     public ResponseEntity<InputStreamResource> getResume(@RequestParam String name){
         String path = "./results/";
+        final HanKeyToEngKey hanKeyToEngKey = new HanKeyToEngKey();
+//        String korToEng = hanKeyToEngKey.getHanKeyToEngKey(name);
+//        System.out.println(hanKeyToEngKey.getHanKeyToEngKey(name));
         String file_name = name + ".pdf";
-        System.out.println(file_name);
+        String encodeName = URLEncoder.encode(name);
+        System.out.println(encodeName);
         File file = new File(path + file_name);
 
         HttpHeaders headers = new HttpHeaders();
