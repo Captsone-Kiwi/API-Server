@@ -186,7 +186,7 @@ public class GetController {
                     evaluationQuestion.setTitle(evaluationCategory.getTitle());
                     evaluationQuestion.setType(evaluationCategory.getType());
                     evaluationQuestion.setRange(Integer.toString(evaluationCategory.getData()));
-                    evaluationQuestion.setData(0);
+                    evaluationQuestion.setData("0");
 
 //                    if(evaluationQuestion.getType() == 1){
 //                        List<String> data = sqldao.getEvaluationChoiceFromQuestionId(evaluationCategory.getQuestion_id());
@@ -207,7 +207,7 @@ public class GetController {
                 evaluationQuestion.setTitle(evaluationCategory.getTitle());
                 evaluationQuestion.setType(evaluationCategory.getType());
                 evaluationQuestion.setRange(Integer.toString(evaluationCategory.getData()));
-                evaluationQuestion.setData(0);
+                evaluationQuestion.setData("0");
 
 
 //                if(evaluationQuestion.getType() == 1){

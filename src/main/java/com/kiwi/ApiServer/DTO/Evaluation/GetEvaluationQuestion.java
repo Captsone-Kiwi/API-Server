@@ -11,5 +11,5 @@ public class GetEvaluationQuestion {
     String title;
     int type;
     String range;
-    int data;
+    String data;
 }

@@ -1,5 +1,6 @@
 package com.kiwi.ApiServer.Controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kiwi.ApiServer.DAO.InterviewRepository;
 import com.kiwi.ApiServer.DAO.SQLDAO;
 import com.kiwi.ApiServer.DAO.UserRepository;
@@ -11,7 +12,6 @@ import com.kiwi.ApiServer.Security.JwtTokenProvider;
 import com.kiwi.ApiServer.Service.FileStorageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tika.parser.txt.CharsetDetector;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
@@ -25,13 +25,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.sql.ResultSet;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 @RestController
@@ -223,6 +218,7 @@ public class PostController {
     @PostMapping(value = "createEvaluationResult")
     public SingleResult createEvaluationResult (HttpServletRequest request, @RequestBody EvaluationResultList evaluationResultList) throws Exception{
         SingleResult singleResult = new SingleResult();
+        ObjectMapper mapper = new ObjectMapper();
 
         SQLDAO sqldao = new SQLDAO();
         String token = request.getHeader("X-AUTH-TOKEN");
@@ -244,11 +240,9 @@ public class PostController {
             String evaluationName = evaluation.getName();
 
             for(EvaluationList evlList : evaluationListList){
-                List<EvaluationQuestion> evaluationQuestionList = evlList.getQuestions();
-
+                List<GetEvaluationQuestion> evaluationQuestionList = evlList.getQuestions();
                 String category = evlList.getCategory();
-
-                for(EvaluationQuestion evaluationQuestion : evaluationQuestionList){
+                for(GetEvaluationQuestion evaluationQuestion : evaluationQuestionList){
                     String questionName = evaluationQuestion.getTitle();
                     int type = evaluationQuestion.getType();
                     String data = evaluationQuestion.getData();
